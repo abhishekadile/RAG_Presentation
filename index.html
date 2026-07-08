@@ -6,7 +6,7 @@
   <title>Highly Scalable and Production-Ready RAG</title>
   <meta name="description" content="Interactive web presentation for a lecture on highly scalable, production-ready retrieval-augmented generation.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2304070d'/%3E%3Cpath d='M14 44V18h20c9 0 15 5 15 13S43 44 34 44H14zm9-8h10c4 0 7-2 7-5s-3-5-7-5H23v10z' fill='%2336d7ff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=rag-anim-2">
+  <link rel="stylesheet" href="styles.css?v=rag-anim-3">
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -14,10 +14,10 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  <script defer src="script.js?v=rag-anim-2"></script>
+  <script defer src="script.js?v=rag-anim-3"></script>
 </head>
 <body>
-  <div class="build-badge" aria-hidden="true">animation pass 2</div>
+  <div class="build-badge" aria-hidden="true">animation pass 3</div>
   <main class="deck" id="deck" aria-live="polite">
     <section class="slide title-slide active" data-title="Title" data-notes="Introduce RAG as the architecture that connects LLM intelligence to external memory. Connect the opening to the transformer class: the model is powerful, but production systems need current, private knowledge.">
       <header class="slide-head">
@@ -119,15 +119,8 @@
         <h2>Text chunks become vectors</h2>
         <p class="lead">Similar meanings should be close together.</p>
       </header>
-      <div class="stage">
-        <div class="vector-plane nearest-demo">
-          <div class="axis x"></div><div class="axis y"></div>
-          <div class="point query" style="left:53%;top:52%"><span>query: contractor PTO</span></div>
-          <div class="point near" style="left:62%;top:44%"><span>contractor eligibility</span></div>
-          <div class="point near" style="left:43%;top:59%"><span>contractor PTO</span></div>
-          <div class="point" style="left:74%;top:70%"><span>employee benefits</span></div>
-          <div class="point far" style="left:22%;top:29%"><span>travel reimbursement</span></div>
-        </div>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="vectors" aria-label="Animated vector space nearest-neighbor search"></canvas>
       </div>
     </section>
 
@@ -160,30 +153,8 @@
         <p class="eyebrow">Offline</p>
         <h2>Ingestion is where knowledge becomes searchable</h2>
       </header>
-      <div class="stage ingestion-demo rich-ingestion">
-        <div class="ingest-doc">
-          <strong>Policy.pdf</strong>
-          <span>Section 4.2 Contractor Benefits</span>
-          <p>Contractors are not eligible for PTO under this policy. Exceptions require People Ops approval.</p>
-          <i></i><i></i><i></i>
-        </div>
-        <div class="ingest-lane">
-          <div class="stage-label">parse + clean</div>
-          <div class="chunk-slice c1">Section title</div>
-          <div class="chunk-slice c2">Eligibility clause</div>
-          <div class="chunk-slice c3">Exception note</div>
-        </div>
-        <div class="embedding-lane">
-          <div class="stage-label">embed</div>
-          <div class="vector-chip v1">[.12, -.44, .08]</div>
-          <div class="vector-chip v2">[.31, .04, -.19]</div>
-          <div class="vector-chip v3">[-.07, .22, .48]</div>
-        </div>
-        <div class="index-bucket">
-          <strong>Vector/Search Index</strong>
-          <span class="index-dot d1"></span><span class="index-dot d2"></span><span class="index-dot d3"></span>
-          <small>text + embedding + metadata + permissions</small>
-        </div>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="ingestion" aria-label="Animated ingestion pipeline from documents to chunks to vectors to index"></canvas>
       </div>
     </section>
 
@@ -192,28 +163,8 @@
         <p class="eyebrow">Online</p>
         <h2>Query time turns a question into evidence</h2>
       </header>
-      <div class="stage query-orchestra">
-        <div class="query-card big">Can contractors take PTO?</div>
-        <div class="rewrite-fan">
-          <span>contractor PTO eligibility</span>
-          <span>offboarding? no, benefits policy</span>
-          <span>People Ops contractor leave</span>
-        </div>
-        <svg class="query-svg" viewBox="0 0 1000 330" aria-label="Query moving through RAG components">
-          <defs>
-            <marker id="arrowHead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z"></path></marker>
-          </defs>
-          <path class="route r1" d="M120 165 C230 60 340 60 450 135 S670 225 830 145"></path>
-          <path class="route r2" d="M120 165 C260 260 330 255 450 195 S650 80 830 185"></path>
-          <g class="q-node n1"><rect x="55" y="125" width="130" height="80"></rect><text x="120" y="160">rewrite</text></g>
-          <g class="q-node n2"><rect x="385" y="110" width="140" height="110"></rect><text x="455" y="153">hybrid</text><text x="455" y="182">retrieve</text></g>
-          <g class="q-node n3"><rect x="605" y="110" width="130" height="110"></rect><text x="670" y="153">rerank</text><text x="670" y="182">evidence</text></g>
-          <g class="q-node n4"><rect x="810" y="105" width="150" height="120"></rect><text x="885" y="148">prompt</text><text x="885" y="177">+ LLM</text></g>
-          <circle class="packet p1" cx="120" cy="165" r="8"></circle>
-          <circle class="packet p2" cx="120" cy="165" r="8"></circle>
-          <circle class="packet p3" cx="120" cy="165" r="8"></circle>
-        </svg>
-        <div class="answer-strip"><span>answer</span><span>citation: HR/PTO#4.2</span><span>confidence checks</span></div>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="query" aria-label="Animated online RAG query pipeline"></canvas>
       </div>
     </section>
 
@@ -303,16 +254,8 @@
         <p class="eyebrow">Production pattern</p>
         <h2>Hybrid retrieval combines sparse and dense signals</h2>
       </header>
-      <div class="stage hybrid-demo rich-hybrid">
-        <div class="stream sparse"><strong>BM25</strong><span>SOC2 · PTO · policy-17B</span><i class="hit h1">policy-17B</i><i class="hit h2">PTO</i><i class="hit h3">E11000</i></div>
-        <div class="stream dense"><strong>Vector Search</strong><span>offboarding ~= employee exit</span><i class="hit h4">offboarding</i><i class="hit h5">contractor leave</i><i class="hit h6">benefits</i></div>
-        <svg class="fusion-svg" viewBox="0 0 900 260" aria-label="Sparse and dense streams merging into candidate pool">
-          <path class="stream-path sparse-path" d="M120 30 C230 80 310 110 430 126"></path>
-          <path class="stream-path dense-path" d="M780 30 C650 80 590 110 470 126"></path>
-          <path class="stream-path filter-path" d="M450 126 C450 170 450 190 450 224"></path>
-          <circle class="fusion-token t1" cx="120" cy="30" r="9"></circle><circle class="fusion-token t2" cx="120" cy="30" r="9"></circle><circle class="fusion-token t3" cx="780" cy="30" r="9"></circle><circle class="fusion-token t4" cx="780" cy="30" r="9"></circle>
-        </svg>
-        <div class="merge-pool"><strong>Candidate Pool</strong><span>dedupe · score fusion · permission filters</span></div>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="hybrid" aria-label="Animated hybrid retrieval with sparse and dense results merging"></canvas>
       </div>
     </section>
 
@@ -321,10 +264,8 @@
         <p class="eyebrow">Relevance</p>
         <h2>Retriever gets candidates. Reranker chooses evidence.</h2>
       </header>
-      <div class="stage rerank-stage">
-        <div class="rank-list before"><h3>Retriever candidates</h3><p>Fast approximate search returns plausible results</p><div class="rank-card a">Employee PTO overview <b>.91</b></div><div class="rank-card b">Contractor eligibility <b>.84</b></div><div class="rank-card c">Holiday calendar <b>.79</b></div><div class="rank-card d">Onboarding checklist <b>.72</b></div></div>
-        <div class="reranker-core"><strong>Reranker</strong><span>query-document cross check</span></div>
-        <div class="rank-list after"><h3>Evidence order</h3><p>Best support rises, distractors fall</p><div class="rank-card b">Contractor eligibility <b>.97</b></div><div class="rank-card e">PTO exceptions <b>.83</b></div><div class="rank-card f">Effective date note <b>.78</b></div><div class="rank-card a">Employee PTO overview <b>.41</b></div></div>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="rerank" aria-label="Animated reranker reordering candidate evidence"></canvas>
       </div>
     </section>
 
@@ -333,15 +274,8 @@
         <p class="eyebrow">Prompt assembly</p>
         <h2>More context is not always better. Better context is better.</h2>
       </header>
-      <div class="stage context-demo rich-context">
-        <div class="candidate-shelf">
-          <p class="accepted">current contractor PTO clause</p>
-          <p class="accepted">effective date and citation</p>
-          <p class="rejected">outdated employee policy</p>
-          <p class="rejected">similar travel policy</p>
-          <p class="accepted">exception language</p>
-        </div>
-        <article class="context-window"><strong>Context Window</strong><div class="budget"><span></span></div><div class="slot s1">clause</div><div class="slot s2">citation</div><div class="slot s3">exception</div><div class="slot reject">rejected</div></article>
+      <div class="stage canvas-stage">
+        <canvas class="concept-canvas" data-anim="context" aria-label="Animated context window accepting and rejecting retrieved chunks"></canvas>
       </div>
     </section>
 

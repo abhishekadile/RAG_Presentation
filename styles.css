@@ -132,6 +132,23 @@ h3 { font-size: clamp(1.45rem, 2.4vw, 2.45rem); line-height: 1.05; }
 
 .center { place-items: center; }
 
+.canvas-stage {
+  align-items: stretch;
+}
+
+.concept-canvas {
+  width: 100%;
+  height: min(58vh, 620px);
+  min-height: 430px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(54,215,255,.14), transparent 28%),
+    radial-gradient(circle at 75% 62%, rgba(85,232,157,.09), transparent 32%),
+    rgba(255,255,255,.035);
+  box-shadow: var(--shadow);
+}
+
 .statement {
   font-size: clamp(2.1rem, 4vw, 4.45rem);
   line-height: 1.08;
