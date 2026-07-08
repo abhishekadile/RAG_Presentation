@@ -15,6 +15,13 @@ This presentation teaches RAG from first principles without becoming a huge 70+ 
 - Advanced patterns such as GraphRAG, multi-query retrieval, query decomposition, parent-child retrieval, and corrective RAG
 - Production architecture, scaling, security, evaluation, and RAG vs fine-tuning
 
+## Files
+
+- `index.html` - the 27-slide static presentation
+- `styles.css` - visual system, responsive layout, and teaching animations
+- `script.js` - slide navigation, notes, overview mode, fullscreen, and go-to-slide controls
+- `.github/workflows/deploy-pages.yml` - GitHub Pages deployment workflow
+
 ## How to run locally
 
 From the repo root:
@@ -33,15 +40,15 @@ You can also open `index.html` directly in a browser.
 
 ## Keyboard controls
 
-- `ArrowRight` or `Space` — next slide
-- `ArrowLeft` — previous slide
-- `Home` — first slide
-- `End` — last slide
-- `S` — toggle speaker notes
-- `O` — overview/grid mode
-- `G` — go to slide number
-- `F` — fullscreen
-- `Esc` — close overlays
+- `ArrowRight` or `Space` - next slide
+- `ArrowLeft` - previous slide
+- `Home` - first slide
+- `End` - last slide
+- `S` - toggle speaker notes
+- `O` - overview/grid mode
+- `G` - go to slide number
+- `F` - fullscreen
+- `Esc` - close overlays
 
 ## Design context for future Codex/agent edits
 
@@ -52,16 +59,19 @@ Important design principles:
 1. **Lecture-first, not bullet-first**  
    Every slide should teach one concept clearly.
 
-2. **Animations should explain, not decorate**  
+2. **Animations should explain, not decorate**
+
    Good animation targets:
    - Documents breaking into chunks
    - Chunks becoming vectors
    - Query vector finding nearest chunks
+   - Query rewrite fan-out through retrieval, reranking, prompt assembly, and citation
    - Hybrid sparse + dense retrieval merging
    - Reranker reordering candidates
    - Context window accepting/rejecting evidence
    - Prompt injection being blocked
    - Production architecture showing offline and online paths
+   - Evaluation suites catching regressions before deployment
 
 3. **Use the right visualization tool**  
    D3 is allowed, but not required. For this version, native HTML/CSS/SVG is preferred because it is lightweight and GitHub Pages friendly. Add D3, Canvas, GSAP, or another library only if it improves teaching clarity.
