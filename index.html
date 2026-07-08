@@ -6,7 +6,7 @@
   <title>Highly Scalable and Production-Ready RAG</title>
   <meta name="description" content="Interactive web presentation for a lecture on highly scalable, production-ready retrieval-augmented generation.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2304070d'/%3E%3Cpath d='M14 44V18h20c9 0 15 5 15 13S43 44 34 44H14zm9-8h10c4 0 7-2 7-5s-3-5-7-5H23v10z' fill='%2336d7ff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=rag-anim-3">
+  <link rel="stylesheet" href="styles.css?v=rag-anim-4">
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -14,10 +14,10 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  <script defer src="script.js?v=rag-anim-3"></script>
+  <script defer src="script.js?v=rag-anim-4"></script>
 </head>
 <body>
-  <div class="build-badge" aria-hidden="true">animation pass 3</div>
+  <div class="build-badge" id="buildBadge" aria-hidden="true">animation pass 4</div>
   <main class="deck" id="deck" aria-live="polite">
     <section class="slide title-slide active" data-title="Title" data-notes="Introduce RAG as the architecture that connects LLM intelligence to external memory. Connect the opening to the transformer class: the model is powerful, but production systems need current, private knowledge.">
       <header class="slide-head">
@@ -25,7 +25,8 @@
         <h1>Highly Scalable and <span>Production-Ready RAG</span></h1>
         <p class="subtitle">From Search Engines to Enterprise AI Systems</p>
       </header>
-      <div class="stage center">
+      <div class="stage center title-stage">
+        <canvas class="concept-canvas title-canvas" data-anim="title" aria-label="Animated RAG title flow"></canvas>
         <div class="flow title-flow" aria-label="RAG flow">
           <div class="flow-node">User Question</div><div class="flow-arrow"></div>
           <div class="flow-node">Retriever</div><div class="flow-arrow"></div>

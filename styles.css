@@ -136,6 +136,11 @@ h3 { font-size: clamp(1.45rem, 2.4vw, 2.45rem); line-height: 1.05; }
   align-items: stretch;
 }
 
+.title-stage {
+  position: relative;
+  overflow: hidden;
+}
+
 .concept-canvas {
   width: 100%;
   height: min(58vh, 620px);
@@ -147,6 +152,33 @@ h3 { font-size: clamp(1.45rem, 2.4vw, 2.45rem); line-height: 1.05; }
     radial-gradient(circle at 75% 62%, rgba(85,232,157,.09), transparent 32%),
     rgba(255,255,255,.035);
   box-shadow: var(--shadow);
+}
+
+.title-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: .95;
+}
+
+.title-flow {
+  position: relative;
+  z-index: 2;
+  padding: 1.2rem;
+  border-radius: 12px;
+  background: rgba(4,7,13,.34);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+}
+
+.build-badge.running {
+  color: var(--green);
+  border-color: rgba(85,232,157,.45);
 }
 
 .statement {

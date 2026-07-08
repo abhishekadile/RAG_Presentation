@@ -8,6 +8,7 @@
   const goModal = document.getElementById('goModal');
   const goForm = document.getElementById('goForm');
   const goInput = document.getElementById('goInput');
+  const buildBadge = document.getElementById('buildBadge');
   const canvases = Array.from(document.querySelectorAll('.concept-canvas'));
   let current = 0;
   let rafId = 0;
@@ -60,8 +61,18 @@
   }
 
   function roundRect(ctx, x, y, w, h, r = 10) {
+    const radius = Math.max(0, Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2));
     ctx.beginPath();
-    ctx.roundRect(x, y, w, h, r);
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
   }
 
   function box(ctx, x, y, w, h, label, opts = {}) {
@@ -189,6 +200,38 @@
     arrow(ctx, chunkX + w * .18, h * .5, vectorX - 16, h * .5);
     arrow(ctx, vectorX + w * .17, h * .5, index.x - 16, h * .5);
     pill(ctx, margin, h - 46, 'parse -> chunk -> embed -> index', '#55e89d');
+  }
+
+  function drawTitle(ctx, w, h, time) {
+    clear(ctx, w, h);
+    const nodes = [
+      ['Question', .11, .50, '#ffca68'],
+      ['Retriever', .30, .34, '#36d7ff'],
+      ['Knowledge', .50, .62, '#55e89d'],
+      ['LLM', .70, .36, '#9a8cff'],
+      ['Answer', .88, .52, '#55e89d']
+    ];
+    ctx.lineWidth = 4;
+    for (let i = 0; i < nodes.length - 1; i += 1) {
+      const [, ax, ay, ac] = nodes[i];
+      const [, bx, by] = nodes[i + 1];
+      arrow(ctx, ax * w, ay * h, bx * w, by * h, `${ac}77`);
+    }
+    nodes.forEach(([label, nx, ny, color], i) => {
+      const pulse = 1 + Math.sin(time / 360 + i) * .08;
+      const bw = 132 * pulse;
+      const bh = 58 * pulse;
+      box(ctx, nx * w - bw / 2, ny * h - bh / 2, bw, bh, label, { fill: `${color}18`, stroke: `${color}99`, size: 17 });
+    });
+    for (let i = 0; i < 8; i += 1) {
+      const p = loop01(time, 3600, i * -.125);
+      const seg = Math.min(nodes.length - 2, Math.floor(p * (nodes.length - 1)));
+      const local = (p * (nodes.length - 1)) % 1;
+      const a = nodes[seg];
+      const b = nodes[seg + 1];
+      movingDot(ctx, a[1] * w, a[2] * h, b[1] * w, b[2] * h, local, i % 2 ? '#36d7ff' : '#ffca68', 5);
+    }
+    pill(ctx, 28, h - 42, 'live retrieval loop: question -> evidence -> grounded answer', '#55e89d');
   }
 
   function drawVectors(ctx, w, h, time) {
@@ -352,6 +395,7 @@
   }
 
   const drawers = {
+    title: drawTitle,
     ingestion: drawIngestion,
     vectors: drawVectors,
     query: drawQuery,
@@ -361,11 +405,24 @@
   };
 
   function animateCanvases(time = 0) {
-    const activeCanvas = slides[current].querySelector('.concept-canvas');
-    if (activeCanvas) {
-      const { ctx, w, h } = resizeCanvas(activeCanvas);
-      const drawer = drawers[activeCanvas.dataset.anim];
-      if (drawer) drawer(ctx, w, h, time);
+    try {
+      const activeCanvas = slides[current].querySelector('.concept-canvas');
+      if (activeCanvas) {
+        const { ctx, w, h } = resizeCanvas(activeCanvas);
+        const drawer = drawers[activeCanvas.dataset.anim];
+        if (drawer) {
+          drawer(ctx, w, h, time);
+          if (buildBadge) {
+            buildBadge.textContent = 'animation pass 4 - running';
+            buildBadge.classList.add('running');
+          }
+        }
+      }
+    } catch (error) {
+      if (buildBadge) {
+        buildBadge.textContent = `animation error: ${error.message}`;
+        buildBadge.classList.remove('running');
+      }
     }
     rafId = requestAnimationFrame(animateCanvases);
   }
